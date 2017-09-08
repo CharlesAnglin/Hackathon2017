@@ -1,7 +1,6 @@
 package controllers
 
 import java.io._
-import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 import play.api.mvc._
@@ -15,7 +14,7 @@ class getPicture extends Controller {
     Ok(views.html.getPicture())
   }
 
-  def postPicture() = Action(parse.temporaryFile) {request =>
+  def postPicture() = Action(parse.temporaryFile) { request =>
     val tempFile = "tmp/tempFileFile.txt"
     request.body.moveTo(new File(tempFile), true)
 
