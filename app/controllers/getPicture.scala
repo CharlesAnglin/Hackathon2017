@@ -4,6 +4,7 @@ import java.io._
 import java.util.Base64
 
 import play.api.mvc._
+import services.GetAccessKeys
 
 import scala.io.Source
 
@@ -18,7 +19,9 @@ class getPicture extends Controller {
     val tempFile = "tmp/tempFileFile.txt"
     request.body.moveTo(new File(tempFile), true)
 
-    val lines = Source.fromFile(tempFile).getLines.toStream
+    val file = Source.fromFile(tempFile)
+    val lines = file.getLines.toStream
+    file.close()
     val fileName = lines(3)
     val img = lines(7)
       .replace("data:image/png;base64,", "")

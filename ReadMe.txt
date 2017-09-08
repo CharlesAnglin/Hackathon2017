@@ -1,0 +1,4 @@
+
+
+
+Mention what format credfile needs to be in etc... (i.e. the cred file you get direct from AWS)
