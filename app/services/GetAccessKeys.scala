@@ -2,7 +2,7 @@ package services
 
 import scala.io.Source
 
-class GetAccessKeys {
+trait GetAccessKeys {
 
   def getAccessKeys: (String, String) = {
     try {

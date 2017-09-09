@@ -1,13 +1,19 @@
 package controllers
 
 import play.api.mvc.{Action, Controller}
-import services.UploadS3
+import services.{Rekog, S3Upload}
 
-class Test extends UploadS3 with Controller {
+class Test extends Controller with S3Upload {
 
   def test = Action {
-    uploadFile("charlie2.png")
-    Ok(s"$accessKey\n$secretKey")
+
+//    val a= testtest
+//    Ok(a.toString)
+
+//    val tup = uploadFile()
+//    Ok(tup._1 + tup._2)
+
+    Ok("hello")
   }
 
 }
