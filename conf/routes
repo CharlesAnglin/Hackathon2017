@@ -3,3 +3,6 @@ GET     /test           controllers.Test.test()
 
 GET     /getPicture     controllers.getPicture.getPicture()
 POST    /postPicture    controllers.getPicture.postPicture()
+
+GET     /searchByPicture    controllers.searchByPicture.getPicture()
+POST    /searchByPicture    controllers.searchByPicture.searchByPicture()

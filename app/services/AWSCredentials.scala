@@ -1,10 +1,16 @@
 package services
 
+import com.amazonaws.auth.BasicAWSCredentials
+
 import scala.io.Source
 
-trait GetAccessKeys {
+trait AWSCredentials {
 
-  def getAccessKeys: (String, String) = {
+  private lazy val (accessKey, secretKey) = getAccessKeys
+
+  lazy val yourAWSCredentials = new BasicAWSCredentials(accessKey, secretKey)
+
+  private def getAccessKeys: (String, String) = {
     try {
       val file = Source.fromFile("credentials.csv")
       val line = file.getLines().toStream(1)
