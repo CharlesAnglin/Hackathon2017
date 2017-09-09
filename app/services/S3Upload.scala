@@ -1,10 +1,11 @@
 package services
 
 import java.io.File
-import utils.Constants._
-import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
+
+import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
+import utils.Constants._
 
 trait S3Upload extends AWSCredentials {
 

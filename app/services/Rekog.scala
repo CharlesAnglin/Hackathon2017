@@ -1,16 +1,16 @@
 package services
 
-import java.io.{BufferedInputStream, FileInputStream}
+import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.util
 
-import utils.Constants._
-import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
+import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.rekognition.{AmazonRekognitionClient, AmazonRekognitionClientBuilder}
+import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
 import com.amazonaws.services.rekognition.model._
+import utils.Constants._
 
-import scala.io.Source
+import scala.collection.JavaConversions
 
 trait Rekog extends AWSCredentials {
 
@@ -19,10 +19,6 @@ trait Rekog extends AWSCredentials {
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(new AWSStaticCredentialsProvider(yourAWSCredentials))
     .build()
-
-  def createCollection = {
-    //TODO: currently can be done via command line, do we want to specifically do it via the app?
-  }
 
   def indexFace(fileName: String, name: String) = {
     val request = new IndexFacesRequest()
@@ -36,7 +32,7 @@ trait Rekog extends AWSCredentials {
     rekognitionClient.indexFaces(request).getFaceRecords
   }
 
-  def searchByFace(fileName: String) = {
+  def searchByFace(fileName: String): List[FaceMatch] = {
     val file = new FileInputStream(s"tmp/$fileName")
     val fChan = file.getChannel()
     val fSize = fChan.size()
@@ -49,9 +45,23 @@ trait Rekog extends AWSCredentials {
     val request = new SearchFacesByImageRequest()
       .withCollectionId(COLLECTION)
       .withImage(new Image()
-                    .withBytes(mBuf))
+        .withBytes(mBuf))
 
-    rekognitionClient.searchFacesByImage(request).getFaceMatches
+    val result = rekognitionClient.searchFacesByImage(request).getFaceMatches
+    //Convert java list to scala list
+    JavaConversions.asScalaBuffer(result).toList
+  }
+
+  /**
+    * Filters out duplicate names and only keeps those with highest confidence. Return List is ordered by highest confidence first.
+    */
+  //N.B. untested... but seems to work so far
+  def filterFaces(faces: List[FaceMatch]): List[FaceMatch] = {
+    val groupedByName = faces.groupBy(face => face.getFace.getExternalImageId)
+    val highestConfidence = groupedByName.map{tup =>
+      (tup._1, tup._2.reduce((a,b) => if(a.getFace.getConfidence >= b.getFace.getConfidence) a else b))
+    }
+    highestConfidence.map(_._2).toList.sortWith(_.getFace.getConfidence > _.getFace.getConfidence)
   }
 
 }

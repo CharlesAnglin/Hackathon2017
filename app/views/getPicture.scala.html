@@ -1,4 +1,4 @@
-
+@(postAction: String)
 <!DOCTYPE html>
 <html>
 
@@ -104,7 +104,7 @@
 </div>
 <canvas id="canvas">
 </canvas>
-<form action="http://localhost:9000/postPicture" method="POST" enctype="multipart/form-data" onsubmit="return prepImageForSaving()">
+<form action=@postAction method="POST" enctype="multipart/form-data" onsubmit="return prepImageForSaving()">
     <input type="text" id="fileName" name="fileName">
     <input type="hidden" id="savedImage" name="savedImage">
     <input type="submit" id="saveButton" name="saveButton">

@@ -1,6 +1,4 @@
 
-GET     /test           controllers.Test.test()
-
 GET     /getPicture     controllers.getPicture.getPicture()
 POST    /postPicture    controllers.getPicture.postPicture()
 
