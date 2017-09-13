@@ -6,5 +6,3 @@ project/target
 /tmp/
 /logs/
 *.csv
-project/build.properties
-project/plugins.sbt
